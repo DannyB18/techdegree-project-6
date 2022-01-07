@@ -1,6 +1,8 @@
 const startButton = document.querySelector('.btn__reset');
 const keyboard = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
+// const li = document.createElement('li');
+
 let missed = 0;
 const phrases = [
     'THE EARLY BIRD CATCHES THE WORM',
@@ -9,6 +11,14 @@ const phrases = [
     'MAY THE FORCE BE WITH YOU',
     'KNOCKED IT OUT OF THE PARK'
 ];
+
+function createLI(text) {
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+    span.textContent = text;
+    li.appendChild(span);
+    return li
+}
 
 startButton.addEventListener('click', () => {
     const startScreen = document.getElementById('overlay');
@@ -23,4 +33,18 @@ function getRandomPhraseAsArray(arr) {
     const phraseLetters = phraseToGuess.split('');
     return phraseLetters;
 }
-getRandomPhraseAsArray(phrases);
+
+function addPhraseToDisplay() {
+    const phraseLetters = getRandomPhraseAsArray(phrases);
+    for (let i = 0; i < phraseLetters.length; i++) {
+        const character = phraseLetters[i];
+        const listItem = createLI(character);
+        if (character === ' ') {
+            listItem.className = 'space';
+        } else {
+            listItem.className = 'letter'
+        }
+        phrase.appendChild(listItem);
+    }
+}
+addPhraseToDisplay();
