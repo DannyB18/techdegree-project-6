@@ -15,15 +15,12 @@ startButton.addEventListener('click', () => {
     startScreen.style.display = 'none';
 });
 
-function getRandomIndex(arr) {
-    const number = Math.floor(Math.random() * arr.length);
-    return number;
-}
+const getRandomIndex = (arr) => Math.floor(Math.random() * arr.length);
+const getRandomPhrase = (arr) => phrases[getRandomIndex(arr)];
 
-function getRandomPhrase(arr) {
-    const index = getRandomIndex(arr)
-    const phraseToGuess = phrases[index];
-    return phraseToGuess;
+function getRandomPhraseAsArray(arr) {
+    const phraseToGuess = getRandomPhrase(arr);
+    const phraseLetters = phraseToGuess.split('');
+    return phraseLetters;
 }
-
-const phraseToGuess = getRandomPhrase(phrases);
+getRandomPhraseAsArray(phrases);
