@@ -34,8 +34,8 @@ function getRandomPhraseAsArray(arr) {
     return phraseLetters;
 }
 
-function addPhraseToDisplay() {
-    const phraseLetters = getRandomPhraseAsArray(phrases);
+function addPhraseToDisplay(arr) {
+    const phraseLetters = getRandomPhraseAsArray(arr);
     for (let i = 0; i < phraseLetters.length; i++) {
         const character = phraseLetters[i];
         const listItem = createLI(character);
@@ -47,4 +47,5 @@ function addPhraseToDisplay() {
         phrase.appendChild(listItem);
     }
 }
-addPhraseToDisplay();
+addPhraseToDisplay(phrases);
+
