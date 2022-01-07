@@ -47,5 +47,17 @@ function addPhraseToDisplay(arr) {
         phrase.appendChild(listItem);
     }
 }
+
 addPhraseToDisplay(phrases);
 
+function checkLetter(button) {
+    const letterClassArray = document.getElementsByClassName('letter');
+    for (let i = 0; i < letterClassArray.length; i++) {
+            const letterSpace = letterClassArray[i];
+            const letter = letterSpace.firstChild.textContent;
+            if (button === letter.toLowerCase()) {
+                letterSpace.classList.add('show'); 
+            }
+    }
+}
+checkLetter(button);
