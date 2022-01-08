@@ -47,17 +47,37 @@ function addPhraseToDisplay(arr) {
         phrase.appendChild(listItem);
     }
 }
-
 addPhraseToDisplay(phrases);
 
+let letterFound;
 function checkLetter(button) {
     const letterClassArray = document.getElementsByClassName('letter');
+    const letterArray = [];
     for (let i = 0; i < letterClassArray.length; i++) {
             const letterSpace = letterClassArray[i];
-            const letter = letterSpace.firstChild.textContent;
-            if (button === letter.toLowerCase()) {
-                letterSpace.classList.add('show'); 
+            const letter = letterSpace.firstChild.textContent.toLowerCase();
+            letterArray.push(letter);
+            if (letterArray.includes(button)) {
+                for (let i = 0; i < letterArray.length; i++) {
+                    if (button === letter) {
+                        letterSpace.classList.add('show');
+                        letterFound = letter;
+                    }
+                }
+            } else {
+                letterFound = null;
             }
     }
 }
-checkLetter(button);
+
+qwerty.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+        const button = e.target;
+        checkLetter(button.textContent);
+        button.className = 'chosen';
+        button.setAttribute('disabled', 'true')
+        if (letterFound === null) {
+            missed++; 
+        }
+    }
+});
