@@ -1,9 +1,11 @@
+const startScreen = document.getElementById('overlay');
 const startButton = document.querySelector('.btn__reset');
+const title = document.querySelector('.title')
 const keyboard = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
-// const li = document.createElement('li');
-
-let missed = 0;
+const scoreboard = document.getElementById('scoreboard');
+const ol = scoreboard.firstElementChild;
+const lives = ol.querySelectorAll('.tries');
 const phrases = [
     'THE EARLY BIRD CATCHES THE WORM',
     'START OFF ON THE RIGHT FOOT',
@@ -11,6 +13,7 @@ const phrases = [
     'MAY THE FORCE BE WITH YOU',
     'KNOCKED IT OUT OF THE PARK'
 ];
+let missed = 0;
 
 function createLI(text) {
     const li = document.createElement('li');
@@ -21,7 +24,6 @@ function createLI(text) {
 }
 
 startButton.addEventListener('click', () => {
-    const startScreen = document.getElementById('overlay');
     startScreen.style.display = 'none';
 });
 
@@ -70,6 +72,23 @@ function checkLetter(button) {
     }
 }
 
+const endScreen = (wl) => {
+    startScreen.className = wl;
+    startScreen.style.display = 'flex';
+    title.textContent = `YOU ${wl.toUpperCase()}!`;
+}
+
+function checkWin() {
+    const shownLetters = document.querySelectorAll('.show');
+    const letters = document.querySelectorAll('.letter');
+    if (shownLetters.length === letters.length) {
+        endScreen('win');
+    } else if (missed >= lives.length) {
+        endScreen('lose');
+        
+    }
+}
+
 qwerty.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
         const button = e.target;
@@ -77,7 +96,12 @@ qwerty.addEventListener('click', (e) => {
         button.className = 'chosen';
         button.setAttribute('disabled', 'true')
         if (letterFound === null) {
-            missed++; 
+            missed++;
+            const currentLife = lives[(lives.length) - missed];
+            const currentHeart = currentLife.firstElementChild;
+            currentLife.className = 'lost';
+            currentHeart.setAttribute('src', 'images/lostHeart.png')
         }
+    checkWin();
     }
 });
