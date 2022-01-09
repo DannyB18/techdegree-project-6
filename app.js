@@ -1,4 +1,6 @@
-const startScreen = document.getElementById('overlay');
+let missed = 0;
+
+const startScreen = document.getElementById('overlay');4
 const startButton = document.querySelector('.btn__reset');
 const title = document.querySelector('.title');
 const keyboard = document.getElementById('qwerty');
@@ -15,7 +17,6 @@ let phrases = [
     'KNOCKED IT OUT OF THE PARK'
 ];
 let usedPhrases = [];
-let missed = 0;
 
 function createLI(text) {
     const li = document.createElement('li');
@@ -28,6 +29,10 @@ function createLI(text) {
 startButton.addEventListener('click', () => {
     startScreen.style.display = 'none';
     if (startButton.textContent === 'Play Again') {
+        resetGame();
+    } else if (startButton.textContent === 'Start Over?') {
+        phrases = usedPhrases;
+        usedPhrases = [];
         resetGame();
     }
 });
@@ -85,11 +90,16 @@ const endScreen = (wl) => {
     startScreen.className = wl;
     startScreen.style.display = 'flex';
     title.textContent = `YOU ${wl.toUpperCase()}!`;
+    const shown = document.querySelectorAll('.show');
+    for (let i = 0; i < shown.length;  i++) {
+        shownLetter = shown[i];
+        shownLetter.classList.remove('show');
+    }
     if (startScreen.style.display === 'flex' && phrases.length === 0) {
-        startScreen.innerHTML = `
-        <h2 class="title">YOU ${wl.toUpperCase()}!</h2>
-        <h3>There are no more phrases</h3>
-        `;
+        const outOfPhrases = document.createElement('h3');
+        outOfPhrases.textContent = 'There are no more phrases'
+        startScreen.insertBefore(outOfPhrases, startButton);
+        startButton.textContent = 'Start Over?'
     } else {
         startButton.textContent = 'Play Again';
     }
@@ -105,6 +115,24 @@ function checkWin() {
     }
 }
 
+const changeHearts = () => {
+    const livesLeft = lives.length - missed;
+    if (livesLeft === lives.length) {
+        for (let i = 0; i < lives.length; i++) {
+            const life = lives[i];
+            const heart = life.firstChild;
+            life.classList.remove('lost');
+            heart.setAttribute('src', 'images/liveHeart.png');
+        }
+    } else if (missed > 0) {
+        const currentLife = lives[livesLeft];
+        const currentHeart = currentLife.firstChild;
+        currentLife.classList.add('lost');
+        currentHeart.setAttribute('src', 'images/lostHeart.png');
+        console.log(currentHeart);
+    }
+}
+
 keyboard.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
         const button = e.target;
@@ -113,26 +141,13 @@ keyboard.addEventListener('click', (e) => {
         button.setAttribute('disabled', 'true');
         if (letterFound === null) {
             missed++;
-            const currentLife = lives[(lives.length) - missed];
-            const currentHeart = currentLife.firstElementChild;
-            currentLife.classList.add('lost');
-            currentHeart.setAttribute('src', 'images/lostHeart.png');
+            changeHearts();
         }
     checkWin();
     }
 });
 
-function resetGame() {
-    missed = 0;
-    phrase.innerHTML = `<ul></ul>`;
-    const lostLives = document.querySelectorAll('.lost');
-    for (let i = 0; i < lostLives.length; i++) {
-        const life = lostLives[i];
-        const heart = life.firstElementChild;
-        life.classList.remove('lost');
-        heart.setAttribute('src', 'images/liveHeart.png');
-
-    }
+const resetButtons = () => {
     for (let i = 0; i < letterButtons.length; i++) {
         const button = letterButtons[i];
         if (button.className === 'chosen') {
@@ -140,5 +155,12 @@ function resetGame() {
             button.removeAttribute('disabled');
         }
     }
+};
+
+function resetGame() {
+    missed = 0;
+    phrase.innerHTML = `<ul></ul>`;
+    changeHearts();
+    resetButtons();
     addPhraseToDisplay(phrases);
 }
