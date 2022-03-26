@@ -64,6 +64,7 @@ button {
   height: 100%;
   max-height: 900px;
   text-align: center;
+  align-content: center;
 }
 
 .section {
@@ -84,7 +85,7 @@ button {
   height: 65px;
   width: 65px;
   padding: 20px 1px 0 1px;
-  margin-right: 2px;
+  margin: 0 3px 6px 0;
   color: transparent;
   background: var(--color-neutral-light);
   border-radius: 5px;
@@ -136,6 +137,8 @@ button {
   left: 0;
   right: 0;
   border-radius: 5px;
+  @media (max-width: 425px) {
+  }
 }
 
 .title {
@@ -164,4 +167,22 @@ button {
 
 .lose a {
   color: var(--color-lose);
+}
+
+@media (max-width: 425px) {
+  h2 {
+    font-size: 30px;
+  }
+  button {
+    font-size: 16px;
+    padding: 0.5rem 0.5rem;
+  }
+  .chosen {
+    font-size: 16px;
+  }
+  .letter {
+    height: 35px;
+    width: 35px;
+    padding-top: 5px;
+  }
 }
